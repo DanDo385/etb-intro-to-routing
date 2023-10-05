@@ -1,36 +1,33 @@
-import { Router, Routes } from 'react-router-dom';
+import { useState, useContext, createContext } from 'react';
 import './App.css';
 
+const MyContext = createContext('initial');
+
 function App() {
+  const [value, setValue] = useState('Hello F`ing World');
+
+  const changeValue = (newValue) => {
+    setValue(newValue);
+  }
+  
   return (
-   <Router>
+    <MyContext.Provider value={{value, changeValue}}>
+      <Example />
+    </MyContext.Provider>
+  );
+
+}
+
+function Example() {
+  const { value, changeValue } = useContext(MyContext);
+  return (
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-      </nav>  
-    
-    
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
+      <p>The current value is '{value}'</p>
+      <button onClick={() => changeValue('Example Value')}>
+        Example: Click me to change the value
+      </button>
     </div>
-  </Router>
   );
 }
 
-function Home() {
-  return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;  
-}
 export default App;
